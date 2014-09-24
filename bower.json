@@ -15,6 +15,7 @@
   ],
   "dependencies": {
     "jquery": "~2.1.1",
-    "color-thief": "*"
+    "color-thief": "*",
+    "bootstrap": "~3.2.0"
   }
 }
