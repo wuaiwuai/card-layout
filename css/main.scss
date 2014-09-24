@@ -1,0 +1,253 @@
+/**
+ * TABLE OF CONTENTS
+ *
+ * SETUP
+ * Mixins........................@mixins | Generic project mixins.
+ *
+ * CUSTOM CODE
+ * Subsection 2..................@tag | text.
+ */
+
+/**
+ * Use @tag to jump to sections
+ */
+
+
+/* ==========================================================================
+   Setup
+   ========================================================================== */
+
+/* Mixins | @mixins
+   ========================================================================== */
+
+@mixin placeholder-content {
+  &::-webkit-input-placeholder {
+     @content;
+  }
+  &:-moz-placeholder { /* Firefox 18- */
+     @content;
+  }
+  &::-moz-placeholder {  /* Firefox 19+ */
+     @content;
+  }
+  &:-ms-input-placeholder {  
+     @content;
+  }
+}
+
+@mixin placeholder {
+  @include placeholder-content {
+    @content;
+  }
+}
+
+@mixin vendor-prefix($name, $argument) {
+  -webkit-#{$name}: #{$argument};
+  -ms-#{$name}: #{$argument};
+  -moz-#{$name}: #{$argument};
+  -o-#{$name}: #{$argument};
+  #{$name}: #{$argument};
+}
+
+/* Project Breakpoints */
+$tablet: 768;
+$desktop: 992;
+$desktop-lg: 1200;
+$desktop-xl: 1600;
+
+@mixin breakpoint($foo) {
+  @media only screen and (min-width: $foo + px) { @content; }
+}
+
+@mixin tablet {
+  @include breakpoint($tablet) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @include breakpoint($desktop) {
+    @content;
+  }
+}
+
+@mixin desktop-lg {
+  @include breakpoint($desktop-lg) {
+    @content;
+  }
+}
+
+@mixin desktop-xl {
+  @include breakpoint($desktop-xl) {
+    @content;
+  }
+}
+
+/* ==========================================================================
+   Variables
+   ========================================================================== */
+
+$color-bg: #222; 
+
+/* ==========================================================================
+   Custom Code
+   ========================================================================== */
+
+/* General CSS | @general
+   ========================================================================== */
+
+body {
+  background-color: $color-bg;
+  // padding-top: 5%;
+  padding-bottom: 5%;
+}
+
+.container-wide {
+  background-color: darken($color-bg, 1.5%);
+}
+
+$card-color: #111;
+.card-scene {
+  padding: 200px 0;
+  @include vendor-prefix(perspective, 800px);
+  // perspective-origin: 50% 100px;
+}
+
+#card-1 {
+  @include vendor-prefix(transform, rotateX(35deg) rotateY(30deg));
+}
+#card-2 {
+  @include vendor-prefix(transform, rotateX(-45deg) rotateY(30deg));
+}
+#card-3 {
+  @include vendor-prefix(transform, rotateX(20deg) rotateY(-30deg));
+}
+
+/* Card transform and dimension variables */
+$card-depth: 4px;
+$card-height: 400px;
+$card-width: 300px;
+
+// @-webkit-keyframes rotate {
+//   from {
+//     -webkit-transform: rotateY(0deg);
+//   }
+//   to { 
+//     -webkit-transform: rotateY(360deg);
+//   }
+// }
+
+.card {
+  -webkit-animation-name:             rotate; 
+  -webkit-animation-duration:         5s; 
+  -webkit-animation-iteration-count:  infinite;
+  position: relative;
+  height: $card-height;
+  width: $card-width;
+  background-color: $card-color;
+  margin: 0 auto;
+  z-index: 10;
+  @include vendor-prefix(transform-style, preserve-3d);
+  // @include vendor-prefix(transform, rotateX(35deg) rotateY(30deg));
+  @include vendor-prefix(border-radius, 20px);
+  .card-light,
+  .card-side,
+  .card-face {
+    position: absolute;
+  }
+  .card-face {
+    height: 100%;
+    width: 100%;
+    z-index: 11;
+    overflow: hidden;
+    img {
+      max-height: 100%;
+    }
+  }
+  .card-side {
+    background-color: lighten($card-color, 75%);
+    @include vendor-prefix(transform-style, preserve-3d);
+  }
+  $gradient-stop-color: $card-color;
+  $gradient-start-color: lighten($card-color, 8%);
+  .card-light {
+    height: 100%;
+    width: 100%;
+    background: $gradient-start-color; /* Old browsers */
+    background: -moz-radial-gradient(top right, ellipse cover,  $gradient-start-color 0%, $gradient-stop-color 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, top right, 0px, top right, 100%, color-stop(0%,$gradient-start-color), color-stop(100%,$gradient-stop-color)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(top right, ellipse cover,  $gradient-start-color 0%,$gradient-stop-color 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(top right, ellipse cover,  $gradient-start-color 0%,$gradient-stop-color 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(top right, ellipse cover,  $gradient-start-color 0%,$gradient-stop-color 100%); /* IE10+ */
+    background: radial-gradient(ellipse at top right,  $gradient-start-color 0%,$gradient-stop-color 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$gradient-start-color', endColorstr='$gradient-stop-color',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  }
+  .card-top {
+    // background-color: blue;
+    width: 100%;
+    height: $card-depth;
+    @include vendor-prefix(transform, rotateX(-90deg) translateY(1px));
+    @include vendor-prefix(transform-origin, top center);
+  }
+  .card-right {
+    right: 0;
+    // background-color: red;
+    height: 100%;
+    width: $card-depth;
+    @include vendor-prefix(transform, rotateY(-90deg) translateX(-1px));
+    @include vendor-prefix(transform-origin, center right);
+  }
+  .card-left {
+    // background-color: red;
+    height: 100%;
+    width: $card-depth;
+    @include vendor-prefix(transform, rotateY(90deg) translateX(1px));
+    @include vendor-prefix(transform-origin, center left);
+  }
+  .card-bottom {
+    bottom: 0;
+    // background-color: blue;
+    width: 100%;
+    height: $card-depth;
+    @include vendor-prefix(transform, rotateX(90deg) translateY(-1px));
+    @include vendor-prefix(transform-origin, bottom center);
+  }
+  // &:after {
+  //   content: "";
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0px;
+  //   display: block;
+  //   height: 100px;
+  //   width: 100px;
+  //   margin: 0 auto;
+  //   background-color: lighten(#A8CC66, 20%);
+  //   z-index: -1;
+  //   // opacity: 0.15;
+  //   @include vendor-prefix(border-radius, 100px);
+  //   @include vendor-prefix(filter, blur(20px));
+  // }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
